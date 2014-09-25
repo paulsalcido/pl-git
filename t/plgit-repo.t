@@ -1,19 +1,19 @@
 use strict;
 use warnings;
 
+use lib qw(t/lib);
 use Test::More tests => 2;
 
-use File::Temp;
-use File::Spec;
+use PlGit::Test;
 
 BEGIN {
     use_ok('PlGit::Repo');
 }
 
-my $basic_git_dir = File::Temp->newdir('plgit_test_XXXX', CLEANUP => 1);
-my $git_dir = File::Spec->catfile($basic_git_dir, 'bare');
-system(sprintf('(mkdir %s && cd %s && git init --bare)', $git_dir, $git_dir));
+my $test = PlGit::Test::Repo->new;
 
-my $plgit = PlGit::Repo->new(location => $git_dir);
+$test->initialize;
 
-is($plgit->location, $git_dir);
+my $plgit = PlGit::Repo->new(location => $test->bare_location);
+
+is($plgit->location, $test->bare_location);

@@ -1,19 +1,20 @@
 use strict;
 use warnings;
 
-use Test::More tests => 2;
+use lib qw(t/lib);
+use Test::More tests => 3;
 
-use File::Temp;
-use File::Spec;
+use PlGit::Test;
 
 BEGIN {
     use_ok('PlGit');
 }
 
-my $basic_git_dir = File::Temp->newdir('plgit_test_XXXX', CLEANUP => 1);
-my $git_dir = File::Spec->catfile($basic_git_dir, 'bare');
-system(sprintf('(mkdir %s && cd %s && git init --bare)', $git_dir, $git_dir));
+my $test = PlGit::Test::Repo->new;
 
-my $plgit = PlGit->new(repositories => [ $git_dir ]);
+$test->initialize;
 
-is_deeply([ map { $_->location } @{$plgit->repositories} ], [ $git_dir ]);
+my $plgit = PlGit->new(repositories => [ $test->bare_location ]);
+
+is_deeply([ map { $_->location } @{$plgit->repositories} ], [ $test->bare_location ], "repositories are properly coerced.");
+is_deeply($plgit->git($plgit->repositories->[0],'branch'), [ '* master' ], "git command shows bare repo only has master branch.");
