@@ -268,6 +268,20 @@ DISTRIBUTIONS
       File::Spec 3.29
       Test::More 0.42
       perl 5.00503
+  File-chdir-0.1009
+    pathname: D/DA/DAGOLDEN/File-chdir-0.1009.tar.gz
+    provides:
+      File::chdir 0.1009
+      File::chdir::ARRAY 0.1009
+      File::chdir::SCALAR 0.1009
+    requirements:
+      Carp 0
+      Cwd 3.16
+      Exporter 0
+      ExtUtils::MakeMaker 6.17
+      File::Spec::Functions 3.27
+      strict 0
+      vars 0
   Hook-LexWrap-0.24
     pathname: C/CH/CHORNY/Hook-LexWrap-0.24.tar.gz
     provides:
