@@ -15,8 +15,45 @@ my $test = PlGit::Test::Repo->new;
 $test->initialize;
 
 is(PlGit::Repo->new(location => $test->bare_location)->location, $test->bare_location);
-is_deeply(PlGit::Repo->new(location => $test->bare_location)->branches, [ '* master' ]);
+
+is_deeply(
+    [
+        map
+        {
+            {
+                name => $_->name,
+                selected => $_->selected
+            }
+        } @{PlGit::Repo->new(location => $test->bare_location)->branches}
+    ],
+    [
+        {
+            name => 'master',
+            selected => 1,
+        },
+    ]
+);
 
 $test->add_branch('test');
 
-is_deeply(PlGit::Repo->new(location => $test->bare_location)->branches, [ '* master', '  test' ]);
+is_deeply(
+    [
+        map
+        {
+            {
+                name => $_->name,
+                selected => $_->selected
+            }
+        } @{PlGit::Repo->new(location => $test->bare_location)->branches}
+    ],
+    [
+        {
+            name => 'master',
+            selected => 1,
+        },
+        {
+            name => 'test',
+            selected => 0,
+        },
+    ]
+);
