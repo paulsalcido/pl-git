@@ -56,4 +56,8 @@ method _build_branches {
     ];
 }
 
+method self_git(@info) {
+    $self->git($self, @info);
+}
+
 1;

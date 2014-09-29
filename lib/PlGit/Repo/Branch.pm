@@ -59,7 +59,7 @@ sub _build_log {
                 branch => $self,
                 repo => $self->repo,
             );
-        } @{$self->git($self->repo, 'log', $self->name, '--format="%C"')}
+        } @{$self->git($self->repo, 'log', $self->name, '--format=%H')}
     ];
 }
 
