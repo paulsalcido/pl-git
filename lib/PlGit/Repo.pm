@@ -3,6 +3,10 @@ package PlGit::Repo;
 use Moose;
 use Moose::Util::TypeConstraints;
 
+use MooseX::Method::Signatures;
+
+with 'PlGit::Role::Git';
+
 subtype 'PlGit::Repo::RepositoryLocation',
     as 'Str',
     where {
@@ -34,5 +38,16 @@ has 'location' => (
     isa => 'PlGit::Repo::RepositoryLocation',
     required => 1,
 );
+
+has 'branches' => (
+    is => 'ro',
+    isa => 'ArrayRef[Str]',
+    builder => '_build_branches',
+    lazy => 1,
+);
+
+method _build_branches {
+    $self->git($self, qw/branch/);
+}
 
 1;
