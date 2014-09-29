@@ -3,25 +3,12 @@ package PlGit::Repo::Branch;
 use Moose;
 use Moose::Util::TypeConstraints;
 
-coerce 'PlGit::Repo::Branch',
-    from 'Str',
-    via {
-        __PACKAGE__->coerce_from_string($_);
-    };
+use PlGit::Repo::Commit;
+
+with 'PlGit::Role::Log';
 
 subtype 'PlGit::Repo::BranchList',
     as 'ArrayRef[PlGit::Repo::Branch]';
-
-coerce 'PlGit::Repo::BranchList',
-    from 'ArrayRef[Str]',
-    via {
-        [
-            map
-            {
-                __PACKAGE__->coerce_from_string($_);
-            } @$_
-        ]
-    };
 
 has 'name' => (
     is => 'ro',
@@ -35,16 +22,45 @@ has 'selected' => (
     default => 0,
 );
 
-sub coerce_from_string {
+has 'log' => (
+    is => 'ro',
+    isa => 'PlGit::Repo::CommitList',
+    builder => '_build_log',
+    lazy => 1,
+);
+
+has 'repo' => (
+    is => 'ro',
+    isa => 'PlGit::Repo|Undef',
+    required => 0,
+    default => undef,
+);
+
+sub from_string {
     my $this = shift;
-    my $description = $_;
+    my $repo = shift;
+    my $description = shift;
     my $selected = (substr($description,0,1) eq '*')? 1 : 0;
     my $clean_name = $description;
     $clean_name =~ s/^\*?\s*//;
     $this->new(
         selected => $selected,
         name => $clean_name,
+        repo => $repo,
     );
+}
+
+sub _build_log {
+    my $self = shift;
+    return [
+        map {
+            PlGit::Repo::Commit->create(
+                id => $_,
+                branch => $self,
+                repo => $self->repo,
+            );
+        } @{$self->git($self->repo, 'log', $self->name, '--format="%C"')}
+    ];
 }
 
 1;

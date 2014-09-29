@@ -46,11 +46,14 @@ has 'branches' => (
     isa => 'PlGit::Repo::BranchList',
     builder => '_build_branches',
     lazy => 1,
-    coerce => 1,
 );
 
 method _build_branches {
-    $self->git($self, qw/branch/);
+    [
+        map {
+            PlGit::Repo::Branch->from_string($self, $_);
+        } @{$self->git($self, qw/branch/)}
+    ];
 }
 
 1;
