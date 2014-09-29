@@ -6,7 +6,8 @@ use Moose;
 use File::Temp;
 use File::Spec;
 use File::Path;
-use Cwd qw/abs_path/;
+
+use File::chdir;
 
 has 'temp' => (
     is => 'ro',
@@ -22,10 +23,17 @@ sub initialize {
 
 sub fill_bare {
     my $self = shift;
-    system(sprintf('(cd %s && git clone %s %s) >/dev/null 2>&1', $self->temp, $self->bare_location, $self->fill_location)) and die $!;
-    system(sprintf('echo "initial commit" >> %s', File::Spec->catfile($self->fill_location, 'README'))) and die $!;
-    system(sprintf('(cd %s && git add --all && git commit -m "Initial Commit") >/dev/null 2>&1', $self->fill_location)) and die $!;
-    system(sprintf('(cd %s && git push -u origin master:master) >/dev/null 2>&1', $self->fill_location)) and die $!;
+    local $CWD = $self->temp;
+    system('git', 'clone', $self->bare_location, $self->fill_location) and die $!;
+    open(my $fh, '>', File::Spec->catfile($self->fill_location, 'README')) or die $!;
+    print $fh "Initial commit\n";
+    close($fh);
+    {
+        local $CWD = $self->fill_location;
+        system(qw/git add --all/);
+        system(qw/git commit -m/,"Initial Commit");
+        system(qw/git push -u origin master:master/);
+    }
 }
 
 sub bare_location {
