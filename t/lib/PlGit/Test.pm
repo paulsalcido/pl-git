@@ -38,4 +38,11 @@ sub fill_location {
     return File::Spec->catfile($self->temp, 'fill');
 }
 
+sub add_branch {
+    my $self = shift;
+    my $name = shift;
+    my $repo = shift || $self->bare_location;
+    system(sprintf('(cd %s && git branch %s) >/dev/null 2>&1', $repo, $name));
+}
+
 1;
