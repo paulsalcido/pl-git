@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 use lib qw(t/lib);
-use Test::More tests => 32;
+use Test::More tests => 33;
 
 use PlGit::Test;
 
@@ -85,6 +85,8 @@ foreach my $field ( qw/
     can_ok($log->[0], $field);
     ok(defined($log->[0]->$field), 'PlGit::Repo::Log has defined ' . $field);
 }
+
+ok(PlGit::Repo->new(location => $test->bare_location)->get_branch('master')->name eq 'master');
 
 is($log->[0]->author_name, PlGit::Repo->new(location => $test->bare_location)->self_git('config', '--get', 'user.name')->[0], 'commit user name matches');
 is($log->[0]->author_email, PlGit::Repo->new(location => $test->bare_location)->self_git('config', '--get', 'user.email')->[0], 'commit user email matches');

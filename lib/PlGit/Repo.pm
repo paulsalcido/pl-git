@@ -60,4 +60,8 @@ method self_git(@info) {
     $self->git($self, @info);
 }
 
+method get_branch(Str $name!) {
+    return [ grep { $_->name eq $name } @{$self->branches} ]->[0];
+}
+
 1;
