@@ -28,8 +28,15 @@ sub fill_bare {
     open(my $fh, '>', File::Spec->catfile($self->fill_location, 'README')) or die $!;
     print $fh "Initial commit\n";
     close($fh);
+    $self->commit($self->fill_location, 'Initial Commit');
+}
+
+sub commit {
+    my $self = shift;
+    my $repo = shift;
+    my $message = shift;
     {
-        local $CWD = $self->fill_location;
+        local $CWD = $repo;
         system(qw/git add --all/);
         system(qw/git commit -m/,"Initial Commit");
         system(qw/git push -u origin master:master/);
@@ -48,9 +55,33 @@ sub fill_location {
 
 sub add_branch {
     my $self = shift;
-    my $name = shift;
     my $repo = shift || $self->bare_location;
+    my $name = shift;
     system(sprintf('(cd %s && git branch %s) >/dev/null 2>&1', $repo, $name));
+}
+
+sub quick_commit {
+    my $self = shift;
+    my $repo = shift;
+    my $data = shift;
+    open(my $fh, '>', File::Spec->catfile($self->fill_location, 'README')) or die $!;
+    print $fh $data . "\n";
+    close($fh);
+    $self->commit($repo, $data);
+}
+
+sub push {
+    my $self = shift;
+    my $repo = shift;
+    my $branch = shift;
+    system(sprintf('(cd %s && git push origin %s) >/dev/null 2>&1', $repo, $branch));
+}
+
+sub switch_branch {
+    my $self = shift;
+    my $repo = shift;
+    my $name = shift;
+    system(sprintf('(cd %s && git checkout %s) >/dev/null 2>&1', $repo, $name));
 }
 
 1;

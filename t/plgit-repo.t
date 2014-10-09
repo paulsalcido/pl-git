@@ -35,7 +35,7 @@ is_deeply(
     "Originally, bare repo has only one branch",
 );
 
-$test->add_branch('test');
+$test->add_branch($test->bare_location, 'test');
 
 is_deeply(
     [
