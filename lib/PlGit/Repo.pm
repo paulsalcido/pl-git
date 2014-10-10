@@ -7,6 +7,8 @@ use MooseX::Method::Signatures;
 
 use PlGit::Repo::Branch;
 
+use PlGit::Types;
+
 with 'PlGit::Role::Git';
 
 subtype 'PlGit::Repo::RepositoryLocation',

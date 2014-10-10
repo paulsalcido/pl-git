@@ -5,10 +5,10 @@ use Moose::Util::TypeConstraints;
 
 use PlGit::Repo::Commit;
 
-with 'PlGit::Role::Log';
+use PlGit::Types;
 
-subtype 'PlGit::Repo::BranchList',
-    as 'ArrayRef[PlGit::Repo::Branch]';
+with 'PlGit::Role::Log'  => { },
+     'PlGit::Role::Diff' => { };
 
 has 'name' => (
     is => 'ro',
@@ -36,6 +36,10 @@ has 'repo' => (
     default => undef,
 );
 
+sub diff_name {
+    return $_[0]->name;
+}
+
 sub from_string {
     my $this = shift;
     my $repo = shift;
@@ -52,15 +56,7 @@ sub from_string {
 
 sub _build_log {
     my $self = shift;
-    return [
-        map {
-            PlGit::Repo::Commit->create(
-                id => $_,
-                branch => $self,
-                repo => $self->repo,
-            );
-        } @{$self->git($self->repo, 'log', $self->name, '--format=%H')}
-    ];
+    return $self->simple_log($self->name);
 }
 
 1;

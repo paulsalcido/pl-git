@@ -5,10 +5,10 @@ use Moose::Util::TypeConstraints;
 
 use MooseX::Method::Signatures;
 
-with 'PlGit::Role::Log';
+use PlGit::Types;
 
-subtype 'PlGit::Repo::CommitList',
-    as 'ArrayRef[PlGit::Repo::Commit]';
+with 'PlGit::Role::Log'  => { },
+     'PlGit::Role::Diff' => { };
 
 has 'id' => (
     is => 'ro',
@@ -21,6 +21,10 @@ has 'repo' => (
     isa => 'PlGit::Repo|Undef',
     default => undef,
 );
+
+sub diff_name {
+    return $_[0]->commit;
+}
 
 # All String types based on show.
 foreach my $item (

@@ -64,7 +64,7 @@ sub quick_commit {
     my $self = shift;
     my $repo = shift;
     my $data = shift;
-    open(my $fh, '>', File::Spec->catfile($self->fill_location, 'README')) or die $!;
+    open(my $fh, '>>', File::Spec->catfile($self->fill_location, 'README')) or die $!;
     print $fh $data . "\n";
     close($fh);
     $self->commit($repo, $data);
