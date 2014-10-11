@@ -9,7 +9,7 @@ BEGIN {
 
 {
     my $file = PlGit::Diff::File->new(
-        section => [
+        sections => [
             '@@ -1 +1,1 @@',
             '-Initial Commit',
             '+Test Data',
@@ -17,11 +17,11 @@ BEGIN {
     );
 
     isa_ok($file, 'PlGit::Diff::File');
-    is($file->section->pointset->start->start, 1);
-    is($file->section->pointset->start->lines, undef);
-    is($file->section->pointset->finish->start, 1);
-    is($file->section->pointset->finish->lines, 1);
-    is_deeply($file->section->contents, [
+    is($file->sections->[0]->pointset->start->start, 1);
+    is($file->sections->[0]->pointset->start->lines, undef);
+    is($file->sections->[0]->pointset->finish->start, 1);
+    is($file->sections->[0]->pointset->finish->lines, 1);
+    is_deeply($file->sections->[0]->contents, [
         '-Initial Commit',
         '+Test Data',
     ]);
