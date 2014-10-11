@@ -45,9 +45,7 @@ is_deeply(\@diff_items,
         '+++ b/README',
         '@@ -1 +1,2 @@',
         ' Initial commit',
-        '~',
         '+Test Commit 1',
-        '~'
     ],
 );
 

@@ -39,7 +39,7 @@ method _build_commits {
 }
 
 method _build_raw_diff {
-    return $self->git($self->repo, 'diff', '--word-diff=porcelain', $self->_diff_ref_string);
+    return $self->git($self->repo, 'diff', $self->_diff_ref_string);
 }
 
 method _diff_ref_string {
