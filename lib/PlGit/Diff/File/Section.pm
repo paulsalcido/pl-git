@@ -1,6 +1,7 @@
 package PlGit::Diff::File::Section;
 
 use Moose;
+use Moose::Util::TypeConstraints;
 
 use PlGit::Diff::File::Section::PointSet;
 
@@ -16,5 +17,16 @@ has 'contents' => (
     isa => 'ArrayRef[Str]',
     required => 1,
 );
+
+coerce __PACKAGE__,
+    from 'ArrayRef[Str]',
+    via {
+        my @data = @$_;
+        my $points = shift @data;
+        __PACKAGE__->new(
+            pointset => $points,
+            contents => \@data,
+        );
+    };
 
 1;
