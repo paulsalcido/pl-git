@@ -16,17 +16,24 @@ coerce 'PlGit::Diff::File::SectionList',
         ];
     };
 
+coerce __PACKAGE__,
+    from 'ArrayRef[Str]',
+    via {
+        __PACKAGE__->from_arrayref($_);
+    };
+
 # has 'command' => (
 #     is => 'ro',
 #     isa => 'PlGit::Diff::File::Command'
 # );
 
-# has 'file' => (
+# has ['start_file', 'end_file] => (
 #     is => 'ro',
 #     isa => 'PlGit::Diff::File::Name',
 #     required => 1,
 # );
 
+# TODO: index line is actually pre, post, and file stat
 # has ['preindex', 'postindex', 'index'] => (
 #     is => 'ro',
 #     isa => 'PlGit::Diff::File::Index',
@@ -50,6 +57,23 @@ sub _split_section_output {
         push $sections->[-1], $line;
     }
     return $sections;
+}
+
+sub from_arrayref {
+    my $this = shift;
+    my $file = shift;
+    my @data = @$file;
+    my $command = shift @data;
+    my $index = shift @data;
+    my $start_file = shift @data;
+    my $end_file = shift @data;
+    $this->new(
+        command => $command,
+        start_file => $start_file,
+        end_file => $end_file,
+        index => $index,
+        sections => \@data,
+    );
 }
 
 1;
