@@ -28,11 +28,11 @@ has 'command' => (
     required => 1,
 );
 
-# has ['start_file', 'end_file] => (
-#     is => 'ro',
-#     isa => 'PlGit::Diff::File::Name',
-#     required => 1,
-# );
+has ['start_file', 'end_file'] => (
+    is => 'ro',
+    isa => 'PlGit::Diff::File::Name',
+    required => 1,
+);
 
 # TODO: index line is actually pre, post, and file stat
 # has ['preindex', 'postindex', 'index'] => (

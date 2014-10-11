@@ -15,9 +15,13 @@ BEGIN {
             '-Initial Commit',
             '+Test Data',
         ],
+        start_file => '--- /dev/null',
+        end_file => '+++ b/README.md',
     );
 
     isa_ok($file, 'PlGit::Diff::File');
+    is($file->start_file, '--- /dev/null');
+    is($file->end_file, '+++ b/README.md');
     is($file->sections->[0]->pointset->start->start, 1);
     is($file->sections->[0]->pointset->start->lines, undef);
     is($file->sections->[0]->pointset->finish->start, 1);
@@ -46,6 +50,8 @@ BEGIN {
     isa_ok($file, 'PlGit::Diff::File');
     ok(@{$file->sections} == 2);
     is($file->command, 'diff --git a/README.md b/README.md');
+    is($file->start_file, '--- a/README.md');
+    is($file->end_file, '+++ b/README.md');
     is($file->sections->[1]->pointset->start->start, 10);
     is($file->sections->[1]->pointset->start->lines, undef);
     is($file->sections->[1]->pointset->finish->start, 10);
