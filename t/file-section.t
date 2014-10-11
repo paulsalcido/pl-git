@@ -7,6 +7,7 @@ BEGIN {
     use_ok('PlGit::Diff::File::Section');
     use_ok('PlGit::Diff::File::Section::Point');
     use_ok('PlGit::Diff::File::Section::PointSet');
+    use_ok('PlGit::Diff::File::Index');
 }
 
 {
@@ -84,6 +85,41 @@ BEGIN {
     is($pointset->start->lines, undef);
     is($pointset->finish->start, 2);
     is($pointset->finish->lines, 5);
+}
+
+{
+    my $index = PlGit::Diff::File::Index->new(
+        start => '1111111',
+        end => '2222222',
+        mode => '100644',
+    );
+
+    isa_ok($index, 'PlGit::Diff::File::Index');
+    is($index->start, '1111111');
+    is($index->end, '2222222');
+    is($index->mode, '100644');
+}
+
+{
+    my $index = PlGit::Diff::File::Index->from_str(
+        'index 1111111..2222222 100644',
+    );
+
+    isa_ok($index, 'PlGit::Diff::File::Index');
+    is($index->start, '1111111');
+    is($index->end, '2222222');
+    is($index->mode, '100644');
+}
+
+{
+    my $index = PlGit::Diff::File::Index->from_str(
+        'index 1111111..2222222',
+    );
+
+    isa_ok($index, 'PlGit::Diff::File::Index');
+    is($index->start, '1111111');
+    is($index->end, '2222222');
+    is($index->mode, undef);
 }
 
 done_testing();
