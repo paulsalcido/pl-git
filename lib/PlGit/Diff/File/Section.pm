@@ -11,4 +11,10 @@ has 'pointset' => (
     required => 1,
 );
 
+has 'contents' => (
+    is => 'ro',
+    isa => 'ArrayRef[Str]',
+    required => 1,
+);
+
 1;

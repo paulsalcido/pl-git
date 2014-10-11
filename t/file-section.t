@@ -41,6 +41,13 @@ BEGIN {
 {
     my $section = PlGit::Diff::File::Section->new(
         pointset => '@@ -1,3 +2,5 @@',
+        contents => [
+            '-Initial Commit',
+            '-Test Commit',
+            '+Initial Commit Test',
+            '+Test Commit Test',
+            '+Testing',
+        ],
     );
 
     isa_ok($section, 'PlGit::Diff::File::Section');
@@ -58,6 +65,13 @@ BEGIN {
 {
     my $section = PlGit::Diff::File::Section->new(
         pointset => '@@ -1 +2,5 @@',
+        contents => [
+            '-Initial Commit',
+            '-Test Commit',
+            '+Initial Commit Test',
+            '+Test Commit Test',
+            '+Testing',
+        ],
     );
 
     isa_ok($section, 'PlGit::Diff::File::Section');
