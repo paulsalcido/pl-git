@@ -17,4 +17,7 @@ subtype 'PlGit::Diff::File::Name',
 subtype 'PlGit::Diff::File::SectionList',
     as 'ArrayRef[PlGit::Diff::File::Section]';
 
+subtype 'PlGit::Diff::FileList',
+    as 'ArrayRef[PlGit::Diff::File]';
+
 1;

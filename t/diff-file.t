@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More tests => 52;
 
 BEGIN {
     use_ok('PlGit::Diff::File');
@@ -114,6 +114,26 @@ BEGIN {
     ok($file->new_mode eq 'new mode 100755');
     ok(@{$file->sections} == 0);
     is($file->indices, undef);
+}
+
+{
+    open(my $fh, '<', 't/data/diff.txt');
+    my @data = <$fh>;
+    close($fh);
+    chomp(@data);
+    my $flist = PlGit::Diff::File->filelist_from_arrayref(\@data);
+    ok(@$flist == 3);
+    isa_ok($_, 'PlGit::Diff::File') foreach @$flist;
+
+# Some random testing.
+    is($flist->[0]->end_file, '+++ b/lib/PlGit/Diff/File.pm');
+    is($flist->[0]->start_file, '--- a/lib/PlGit/Diff/File.pm');
+    is($flist->[0]->sections->[0]->pointset->start->start, 1);
+    is($flist->[0]->sections->[0]->pointset->start->lines, 11);
+    is($flist->[0]->sections->[2]->pointset->finish->start, 75);
+    is($flist->[0]->sections->[2]->pointset->finish->lines, 14);
+    is($flist->[1]->sections->[0]->contents->[0], " subtype 'PlGit::Diff::File::Name',");
+    is($flist->[2]->command, 'diff --git a/t/diff-file.t b/t/diff-file.t');
 }
 
 done_testing();

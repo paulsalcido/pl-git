@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 11;
+use Test::More tests => 20;
 
 use PlGit::Test;
 use Data::Dumper;
@@ -49,5 +49,17 @@ is_deeply(\@diff_items,
     ],
 );
 
+ok((scalar @{$diff->files}) == 1);
+is($diff->files->[0]->command, 'diff --git a/README b/README');
+is($diff->files->[0]->start_file, '--- a/README');
+is($diff->files->[0]->end_file, '+++ b/README');
+is($diff->files->[0]->sections->[0]->pointset->start->start, 1);
+is($diff->files->[0]->sections->[0]->pointset->start->lines, undef);
+is($diff->files->[0]->sections->[0]->pointset->finish->start, 1);
+is($diff->files->[0]->sections->[0]->pointset->finish->lines, 2);
+is_deeply($diff->files->[0]->sections->[0]->contents, [
+    ' Initial commit',
+    '+Test Commit 1',
+]);
 
 done_testing();

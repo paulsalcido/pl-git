@@ -1,9 +1,3 @@
-commit bdfd2dac131e92d86b2a12fc55d3e832c6650f50
-Author: Paul David Salcido <paulsalcido.79@gmail.com>
-Date:   Sat Oct 11 16:09:06 2014 -0400
-
-    indices as Diff::File::Index
-
 diff --git a/lib/PlGit/Diff/File.pm b/lib/PlGit/Diff/File.pm
 index f129ee8..2628b4b 100644
 --- a/lib/PlGit/Diff/File.pm

@@ -89,4 +89,26 @@ sub from_arrayref {
     );
 }
 
+sub filelist_from_arrayref {
+    my $this = shift;
+    my $data = shift;
+    return [
+        map {
+            $this->from_arrayref($_);
+        } @{_split_file_list($data)}
+    ];
+}
+
+sub _split_file_list {
+    my $data = shift;
+    my $splits = [ ];
+    foreach my $line ( @$data ) {
+        if ( $line =~ /^diff/ ) {
+            push @$splits, [ ];
+        }
+        push $splits->[-1], $line if ( scalar @$splits );
+    }
+    return $splits;
+}
+
 1;
