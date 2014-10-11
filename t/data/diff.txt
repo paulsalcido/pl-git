@@ -1,0 +1,106 @@
+diff --git a/lib/PlGit/Diff/File.pm b/lib/PlGit/Diff/File.pm
+index f129ee8..2628b4b 100644
+--- a/lib/PlGit/Diff/File.pm
++++ b/lib/PlGit/Diff/File.pm
+@@ -1,11 +1,13 @@
+ package PlGit::Diff::File;
+ 
+ use Moose;
+-use PlGit::Types;
+-use PlGit::Diff::File::Section;
+ 
+ use Moose::Util::TypeConstraints;
+ 
++use PlGit::Types;
++use PlGit::Diff::File::Section;
++use PlGit::Diff::File::Index;
++
+ coerce 'PlGit::Diff::File::SectionList',
+     from 'ArrayRef[Str]',
+     via {
+@@ -40,12 +42,12 @@ has ['start_file', 'end_file'] => (
+     default => undef,
+ );
+ 
+-# TODO: index line is actually pre, post, and file stat
+-# has ['preindex', 'postindex', 'index'] => (
+-#     is => 'ro',
+-#     isa => 'PlGit::Diff::File::Index',
+-#     required => 1,
+-# );
++has 'indices' => (
++    is => 'ro',
++    isa => 'PlGit::Diff::File::Index|Undef',
++    coerce => 1,
++    default => undef,
++);
+ 
+ has 'sections' => (
+     is => 'ro',
+@@ -73,14 +75,14 @@ sub from_arrayref {
+     my $command = shift @data;
+     my $old_mode = ( $data[0] =~ /^old mode \d+$/ ) ? shift @data : undef;
+     my $new_mode = ( $data[0] =~ /^new mode \d+$/ ) ? shift @data : undef;
+-    my $index = shift @data;
+-    my $start_file = shift @data;
+-    my $end_file = shift @data;
++    my $index = ($data[0] =~ /^index/ ) ? shift @data : undef;
++    my $start_file = ($data[0] =~ /^---/ ) ? shift @data : undef;
++    my $end_file = ($data[0] =~ /^\+\+\+/ ) ? shift @data : undef;
+     $this->new(
+         command => $command,
+         start_file => $start_file,
+         end_file => $end_file,
+-        index => $index,
++        indices => $index,
+         old_mode => $old_mode,
+         new_mode => $new_mode,
+         sections => \@data,
+diff --git a/lib/PlGit/Types.pm b/lib/PlGit/Types.pm
+index 1417307..0e1fe41 100644
+--- a/lib/PlGit/Types.pm
++++ b/lib/PlGit/Types.pm
+@@ -14,9 +14,6 @@ subtype 'PlGit::Diff::File::Command',
+ subtype 'PlGit::Diff::File::Name',
+     as 'Str';
+ 
+-subtype 'PlGit::Diff::File::Index',
+-    as 'Str';
+-
+ subtype 'PlGit::Diff::File::SectionList',
+     as 'ArrayRef[PlGit::Diff::File::Section]';
+ 
+diff --git a/t/diff-file.t b/t/diff-file.t
+index 9b41f36..754d63e 100644
+--- a/t/diff-file.t
++++ b/t/diff-file.t
+@@ -62,6 +62,10 @@ BEGIN {
+             '+Not',
+         ],
+     );
++    isa_ok($file->indices, 'PlGit::Diff::File::Index');
++    is($file->indices->start, '123456a');
++    is($file->indices->end, '1b35b6f');
++    is($file->indices->mode, '100644');
+ }
+ 
+ {
+@@ -90,6 +94,10 @@ BEGIN {
+     is($file->sections->[0]->pointset->start->lines, undef);
+     is($file->sections->[0]->pointset->finish->start, 1);
+     is($file->sections->[0]->pointset->finish->lines, 3);
++    isa_ok($file->indices, 'PlGit::Diff::File::Index');
++    is($file->indices->start, '345e6ae');
++    is($file->indices->end, 'f368db0');
++    is($file->indices->mode, undef);
+ }
+ 
+ {
+@@ -105,6 +113,7 @@ BEGIN {
+     ok($file->old_mode eq 'old mode 100644');
+     ok($file->new_mode eq 'new mode 100755');
+     ok(@{$file->sections} == 0);
++    is($file->indices, undef);
+ }
+ 
+ done_testing();

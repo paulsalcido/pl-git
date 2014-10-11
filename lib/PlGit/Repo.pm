@@ -7,6 +7,8 @@ use MooseX::Method::Signatures;
 
 use PlGit::Repo::Branch;
 
+use PlGit::Types;
+
 with 'PlGit::Role::Git';
 
 subtype 'PlGit::Repo::RepositoryLocation',
@@ -58,6 +60,10 @@ method _build_branches {
 
 method self_git(@info) {
     $self->git($self, @info);
+}
+
+method get_branch(Str $name!) {
+    return [ grep { $_->name eq $name } @{$self->branches} ]->[0];
 }
 
 1;

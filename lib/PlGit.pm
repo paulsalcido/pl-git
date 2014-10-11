@@ -4,7 +4,6 @@ use Moose;
 use MooseX::Method::Signatures;
 
 use PlGit::Repo;
-use Carp;
 
 with 'PlGit::Role::Git';
 
