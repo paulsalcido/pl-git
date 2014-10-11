@@ -64,4 +64,47 @@ BEGIN {
     );
 }
 
+{
+    # Mode Handling.
+    my $file = PlGit::Diff::File->from_arrayref(
+        [
+            'diff --git a/README b/README',
+            'old mode 100755',
+            'new mode 100644',
+            'index 345e6ae..f368db0',
+            '--- a/README',
+            '+++ b/README',
+            '@@ -1 +1,3 @@',
+            ' Test',
+            '+',
+            '+Testing more',
+        ]
+    );
+
+    ok($file->old_mode eq 'old mode 100755');
+    ok($file->new_mode eq 'new mode 100644');
+    ok(@{$file->sections} == 1);
+    is($file->start_file, '--- a/README');
+    is($file->end_file, '+++ b/README');
+    is($file->sections->[0]->pointset->start->start, 1);
+    is($file->sections->[0]->pointset->start->lines, undef);
+    is($file->sections->[0]->pointset->finish->start, 1);
+    is($file->sections->[0]->pointset->finish->lines, 3);
+}
+
+{
+    # Mode only (happens!)
+    my $file = PlGit::Diff::File->from_arrayref(
+        [
+            'diff --git a/README b/README',
+            'old mode 100644',
+            'new mode 100755',
+        ],
+    );
+
+    ok($file->old_mode eq 'old mode 100644');
+    ok($file->new_mode eq 'new mode 100755');
+    ok(@{$file->sections} == 0);
+}
+
 done_testing();

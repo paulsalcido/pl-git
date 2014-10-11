@@ -22,6 +22,12 @@ coerce __PACKAGE__,
         __PACKAGE__->from_arrayref($_);
     };
 
+has ['old_mode', 'new_mode'] => (
+    is => 'ro',
+    isa => 'Str|Undef',
+    default => undef,
+);
+
 has 'command' => (
     is => 'ro',
     isa => 'PlGit::Diff::File::Command',
@@ -30,8 +36,8 @@ has 'command' => (
 
 has ['start_file', 'end_file'] => (
     is => 'ro',
-    isa => 'PlGit::Diff::File::Name',
-    required => 1,
+    isa => 'PlGit::Diff::File::Name|Undef',
+    default => undef,
 );
 
 # TODO: index line is actually pre, post, and file stat
@@ -65,6 +71,8 @@ sub from_arrayref {
     my $file = shift;
     my @data = @$file;
     my $command = shift @data;
+    my $old_mode = ( $data[0] =~ /^old mode \d+$/ ) ? shift @data : undef;
+    my $new_mode = ( $data[0] =~ /^new mode \d+$/ ) ? shift @data : undef;
     my $index = shift @data;
     my $start_file = shift @data;
     my $end_file = shift @data;
@@ -73,6 +81,8 @@ sub from_arrayref {
         start_file => $start_file,
         end_file => $end_file,
         index => $index,
+        old_mode => $old_mode,
+        new_mode => $new_mode,
         sections => \@data,
     );
 }
