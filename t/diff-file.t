@@ -9,6 +9,7 @@ BEGIN {
 
 {
     my $file = PlGit::Diff::File->new(
+        command => 'diff --git a/README.md b/README.md',
         sections => [
             '@@ -1 +1,1 @@',
             '-Initial Commit',
@@ -44,6 +45,7 @@ BEGIN {
     );
     isa_ok($file, 'PlGit::Diff::File');
     ok(@{$file->sections} == 2);
+    is($file->command, 'diff --git a/README.md b/README.md');
     is($file->sections->[1]->pointset->start->start, 10);
     is($file->sections->[1]->pointset->start->lines, undef);
     is($file->sections->[1]->pointset->finish->start, 10);

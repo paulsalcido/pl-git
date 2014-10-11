@@ -22,10 +22,11 @@ coerce __PACKAGE__,
         __PACKAGE__->from_arrayref($_);
     };
 
-# has 'command' => (
-#     is => 'ro',
-#     isa => 'PlGit::Diff::File::Command'
-# );
+has 'command' => (
+    is => 'ro',
+    isa => 'PlGit::Diff::File::Command',
+    required => 1,
+);
 
 # has ['start_file', 'end_file] => (
 #     is => 'ro',
