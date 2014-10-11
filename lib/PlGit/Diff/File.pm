@@ -1,10 +1,12 @@
 package PlGit::Diff::File;
 
 use Moose;
-use PlGit::Types;
-use PlGit::Diff::File::Section;
 
 use Moose::Util::TypeConstraints;
+
+use PlGit::Types;
+use PlGit::Diff::File::Section;
+use PlGit::Diff::File::Index;
 
 coerce 'PlGit::Diff::File::SectionList',
     from 'ArrayRef[Str]',
@@ -40,12 +42,12 @@ has ['start_file', 'end_file'] => (
     default => undef,
 );
 
-# TODO: index line is actually pre, post, and file stat
-# has ['preindex', 'postindex', 'index'] => (
-#     is => 'ro',
-#     isa => 'PlGit::Diff::File::Index',
-#     required => 1,
-# );
+has 'indices' => (
+    is => 'ro',
+    isa => 'PlGit::Diff::File::Index|Undef',
+    coerce => 1,
+    default => undef,
+);
 
 has 'sections' => (
     is => 'ro',
@@ -73,14 +75,14 @@ sub from_arrayref {
     my $command = shift @data;
     my $old_mode = ( $data[0] =~ /^old mode \d+$/ ) ? shift @data : undef;
     my $new_mode = ( $data[0] =~ /^new mode \d+$/ ) ? shift @data : undef;
-    my $index = shift @data;
-    my $start_file = shift @data;
-    my $end_file = shift @data;
+    my $index = ($data[0] =~ /^index/ ) ? shift @data : undef;
+    my $start_file = ($data[0] =~ /^---/ ) ? shift @data : undef;
+    my $end_file = ($data[0] =~ /^\+\+\+/ ) ? shift @data : undef;
     $this->new(
         command => $command,
         start_file => $start_file,
         end_file => $end_file,
-        index => $index,
+        indices => $index,
         old_mode => $old_mode,
         new_mode => $new_mode,
         sections => \@data,

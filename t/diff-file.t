@@ -62,6 +62,10 @@ BEGIN {
             '+Not',
         ],
     );
+    isa_ok($file->indices, 'PlGit::Diff::File::Index');
+    is($file->indices->start, '123456a');
+    is($file->indices->end, '1b35b6f');
+    is($file->indices->mode, '100644');
 }
 
 {
@@ -90,6 +94,10 @@ BEGIN {
     is($file->sections->[0]->pointset->start->lines, undef);
     is($file->sections->[0]->pointset->finish->start, 1);
     is($file->sections->[0]->pointset->finish->lines, 3);
+    isa_ok($file->indices, 'PlGit::Diff::File::Index');
+    is($file->indices->start, '345e6ae');
+    is($file->indices->end, 'f368db0');
+    is($file->indices->mode, undef);
 }
 
 {
@@ -105,6 +113,7 @@ BEGIN {
     ok($file->old_mode eq 'old mode 100644');
     ok($file->new_mode eq 'new mode 100755');
     ok(@{$file->sections} == 0);
+    is($file->indices, undef);
 }
 
 done_testing();
