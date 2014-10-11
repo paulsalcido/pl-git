@@ -16,7 +16,7 @@ coerce __PACKAGE__,
     from 'Str',
     via {
         my $str = $_;
-        ( $str =~ /^\@\@ \-(\d+)\,(\d+) \+(\d+)\,(\d+) \@\@/ ) ?
+        ( $str =~ /^\@\@ \-(\d+)(?:\,(\d+))? \+(\d+)(?:\,(\d+))? \@\@/ ) ?
             __PACKAGE__->new(start => [ $1 , $2 ], finish => [ $3, $4 ]):
             undef;
     };
