@@ -1,5 +1,7 @@
 package PlGit::Role::Git;
 
+# ABSTRACT: Role that allows for git to be called on a repo via system call.
+
 use Moose::Role;
 use File::chdir;
 

@@ -1,5 +1,7 @@
 package PlGit::Role::Diff;
 
+# ABSTRACT: Role that marks an object as being part of a possible diff command.
+
 use Moose::Role;
 use MooseX::Method::Signatures;
 

@@ -1,5 +1,7 @@
 package PlGit::Diff::File::Section::PointSet;
 
+# ABSTRACT: Object containing a set of points for before and after a file modification.
+
 use Moose;
 use Moose::Util::TypeConstraints;
 

@@ -1,5 +1,7 @@
 package PlGit::Diff::File::Section;
 
+# ABSTRACT: Object representing a section of a file shown in a diff.
+
 use Moose;
 use MooseX::Method::Signatures;
 use Moose::Util::TypeConstraints;

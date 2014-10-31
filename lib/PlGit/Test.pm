@@ -1,5 +1,7 @@
 package PlGit::Test;
 
+# ABSTRACT: Testing utils for PlGit
+
 package PlGit::Test::Repo;
 
 use Moose;

@@ -9,6 +9,16 @@ use PlGit::Repo;
 
 with 'PlGit::Role::Git';
 
+=head1 METHODS
+
+=method repositories
+
+Can be set at the beginning with the 'repositories' option.
+
+This will coerce items from strings into PlGit::Repo objects.
+
+=cut
+
 has 'repositories' => (
     is => 'ro',
     isa => 'PlGit::RepoList',

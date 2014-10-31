@@ -1,5 +1,18 @@
 package PlGit::Repo;
 
+# ABSTRACT: Object representing an entire repo
+
+=head1 SYNOPSIS
+
+    my $repo = PlGit::Repo->new(
+        location => ... # string representing local dir
+    );
+
+    $repo->location; # passed location
+    $repo->branches; # list of branches
+
+=cut
+
 use Moose;
 use Moose::Util::TypeConstraints;
 

@@ -1,5 +1,7 @@
 package PlGit::Diff::File;
 
+# ABSTRACT: Represents the file information present in a diff.
+
 use Moose;
 
 use Moose::Util::TypeConstraints;

@@ -1,5 +1,7 @@
 package PlGit::Diff::File::Index;
 
+# ABSTRACT: Represents the indexes on a file before or after a modification.
+
 use Moose;
 use Moose::Util::TypeConstraints;
 

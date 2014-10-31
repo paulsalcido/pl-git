@@ -1,5 +1,7 @@
 package PlGit::Diff::File::Section::Point;
 
+# ABSTRACT: Object representing the start and number of lines in an object.
+
 use Moose;
 use Moose::Util::TypeConstraints;
 
