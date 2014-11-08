@@ -1,5 +1,7 @@
 package PlGit::Types;
 
+# ABSTRACT: Types class for PlGit
+
 use Moose::Util::TypeConstraints;
 
 subtype 'PlGit::Repo::BranchList',

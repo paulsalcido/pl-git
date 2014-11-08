@@ -1,5 +1,20 @@
 package PlGit::Diff;
 
+# ABSTRACT: Object representing a diff between two objects.
+
+=head1 SYNOPSIS
+
+    my $diff = PlGit::Diff->new(
+        start_ref   => # Something that does PlGit::Role::Diff
+        end_ref     => # Something that does PlGit::Role::Diff
+    );
+
+    my $commits = $diff->commits; # ArrayRef[PlGit::Repo::Commit]
+    my $diff_arr = $diff->raw_diff; # ArrayRef[Str]
+    my $files = $diff->files; # ArrayRef[PlGit::Diff::File]
+
+=cut
+
 use Moose;
 use MooseX::Method::Signatures;
 

@@ -1,5 +1,7 @@
 package PlGit::Repo::Commit;
 
+# ABSTRACT: Object representing a commit in a repo.
+
 use Moose;
 use Moose::Util::TypeConstraints;
 

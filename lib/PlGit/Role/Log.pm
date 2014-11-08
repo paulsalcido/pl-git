@@ -1,5 +1,7 @@
 package PlGit::Role::Log;
 
+# ABSTRACT: Role that allows for the log command to be called on a specified object.
+
 use Moose::Role;
 
 with 'PlGit::Role::Git';

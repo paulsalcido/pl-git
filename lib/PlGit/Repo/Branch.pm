@@ -1,5 +1,7 @@
 package PlGit::Repo::Branch;
 
+# ABSTRACT: Object representing a branch for a repo.
+
 use Moose;
 use Moose::Util::TypeConstraints;
 
