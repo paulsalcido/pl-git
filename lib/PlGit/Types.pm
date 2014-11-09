@@ -10,6 +10,9 @@ subtype 'PlGit::Repo::BranchList',
 subtype 'PlGit::Repo::CommitList',
     as 'ArrayRef[PlGit::Repo::Commit]';
 
+subtype 'PlGit::Repo::TagList',
+    as 'ArrayRef[PlGit::Repo::Tag]';
+
 subtype 'PlGit::Diff::File::Command',
     as 'Str';
 

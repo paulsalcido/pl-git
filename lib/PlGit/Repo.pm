@@ -19,6 +19,7 @@ use Moose::Util::TypeConstraints;
 use MooseX::Method::Signatures;
 
 use PlGit::Repo::Branch;
+use PlGit::Repo::Tag;
 
 use PlGit::Types;
 
@@ -63,11 +64,26 @@ has 'branches' => (
     lazy => 1,
 );
 
+has 'tags' => (
+    is => 'ro',
+    isa => 'PlGit::Repo::TagList',
+    builder => '_build_tags',
+    lazy => 1,
+);
+
 method _build_branches {
     [
         map {
             PlGit::Repo::Branch->from_string($self, $_);
         } @{$self->git($self, qw/branch/)}
+    ];
+}
+
+method _build_tags {
+    [
+        map {
+            PlGit::Repo::Tag->from_string($self, $_);
+        } @{$self->git($self, qw/tag/)}
     ];
 }
 

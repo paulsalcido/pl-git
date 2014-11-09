@@ -45,6 +45,16 @@ sub commit {
     }
 }
 
+sub tag {
+    my $self = shift;
+    my $repo = shift;
+    my $tag = shift;
+    {
+        local $CWD = $repo;
+        system (qw/git tag/, $tag);
+    }
+}
+
 sub bare_location {
     my $self = shift;
     return File::Spec->catfile($self->temp, 'bare');

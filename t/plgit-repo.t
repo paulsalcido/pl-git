@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 use lib qw(t/lib);
-use Test::More tests => 33;
+use Test::More tests => 38;
 
 use PlGit::Test;
 
@@ -90,3 +90,14 @@ ok(PlGit::Repo->new(location => $test->bare_location)->get_branch('master')->nam
 
 is($log->[0]->author_name, PlGit::Repo->new(location => $test->bare_location)->self_git('config', '--get', 'user.name')->[0], 'commit user name matches');
 is($log->[0]->author_email, PlGit::Repo->new(location => $test->bare_location)->self_git('config', '--get', 'user.email')->[0], 'commit user email matches');
+
+$test->tag($test->bare_location, '1.2.3');
+
+{
+    my $repo = PlGit::Repo->new(location => $test->bare_location);
+    ok((@{$repo->tags} == 1), "There is one known tag");
+    isa_ok($repo->new(location => $test->bare_location)->tags->[0], "PlGit::Repo::Tag");
+    is($repo->tags->[0]->name, '1.2.3');
+    ok($repo->tags->[0]->does('PlGit::Role::Log'), "Tags can log");
+    ok($repo->tags->[0]->does('PlGit::Role::Diff'), "Tags can be used in diffs");
+}
